@@ -64,8 +64,6 @@ def main():
     elif input_fileext == '.csv':
         data = read_csv(input_file)
 
-    print(data)
-
     template_dir = os.path.dirname(os.path.abspath(args.template))
     environment = Environment(loader=FileSystemLoader(template_dir))
 
