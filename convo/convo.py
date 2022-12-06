@@ -1,18 +1,14 @@
 """
-Converts JSON files to other formats via templates.
+Converts CSV, JSON or XML files to other formats via templates.
 """
 
 import argparse
 import csv
 import json
 import os
+import xmltodict
 
 from jinja2 import Environment, FileSystemLoader
-
-
-def read_json_file(input_file: str):
-    file = open(input_file)
-    return json.load(file)
 
 
 def read_csv(input_file: str):
@@ -42,27 +38,38 @@ def read_csv(input_file: str):
     return data
 
 
+def read_json(input_file: str):
+    file = open(input_file)
+    return json.load(file)
+
+
+def read_xml(input_file: str):
+    file = open(input_file)
+    return xmltodict.parse(file.read)
+
+
 def main():
     """
-    Parse command line arguments, read JSON from input file, transform via template and write to output file.
+    Parse command line arguments, read CSV, JSON or XML from input file, transform via template and write to output.
     """
     parser = argparse.ArgumentParser(
-        description='Converts JSON files to other formats via templates')
+        description='Converts input files to other formats via templates')
     parser.add_argument('input', type=str)
     parser.add_argument('template', type=str)
     parser.add_argument('output', type=str)
 
     args = parser.parse_args()
 
-    input_file = args.input
-    _, input_fileext = os.path.splitext(input_file)
+    _, extension = os.path.splitext(args.input)
 
     data = {}
 
-    if input_fileext == '.json':
-        data = read_json(input_file)
-    elif input_fileext == '.csv':
-        data = read_csv(input_file)
+    if extension == '.json':
+        data = read_json(args.input)
+    elif extension == '.csv':
+        data = read_csv(args.input)
+    elif extension == '.xml':
+        data = read_xml(args.input)
 
     template_dir = os.path.dirname(os.path.abspath(args.template))
     environment = Environment(loader=FileSystemLoader(template_dir))
