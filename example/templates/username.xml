@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<users>
+    {%- for item in items %}
+    <user id="{{ item.Identifier }}">
+        <username>{{ item.Username }}</username>
+        <Firstname>{{ item.Username }}</Firstname>
+        <Lastname>{{ item.Lastname }}</Lastname>
+    </user>
+    {%- endfor %}
+</users>
